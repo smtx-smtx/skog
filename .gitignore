@@ -1,0 +1,28 @@
+# ===== System- og editorfiler =====
+.DS_Store
+.claude/
+.vscode/
+*.swp
+
+# ===== Originalfiler (store kildefiler) =====
+# Nettsiden bruker bare de komprimerte nettversjonene.
+# Originalene ligger fortsatt i mappene lokalt, men lastes ikke opp.
+
+# Prosjekt 1 – Arboretet (nettside bruker arboretet-video.mp4)
+prosjekter/Prosjekt 1/Arboretet logo animasjon_2.mp4
+
+# Prosjekt 2 – Cinematic Animation (nettside bruker cinematic-*.mp4)
+prosjekter/Prosjekt 2/Cinematic circle.mp4
+prosjekter/Prosjekt 2/Cinematic square.mp4
+
+# Prosjekt 3 – Magick Touch (nettside bruker .jpg-versjonene)
+prosjekter/Prosjekt 3/1-Banner.png
+prosjekter/Prosjekt 3/2-plakat.pdf
+prosjekter/Prosjekt 3/3-SoMe.png
+
+# Prosjekt 4 – Album Covers (nettside bruker bare web/-mappen)
+prosjekter/Prosjekt 4/*
+!prosjekter/Prosjekt 4/web/
+
+# Photoshop-filer generelt
+*.psd

@@ -1,0 +1,384 @@
+/* ==========================================================
+   Portfolio – stilark
+   Endre farger og fonter her i :root, så oppdateres hele siden.
+   ========================================================== */
+
+:root {
+  --bg: #cdcdcd;
+  --text: #161616;
+  --muted: #4f4f4f;
+  --line: #b5b5b5;
+  --accent: #161616;
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Oswald", "Arial Narrow", sans-serif;   /* overskriftsfont */
+  --display-weight: 300;   /* felles tykkelse for overskrifter: 200 (tynn) – 700 (fet) */
+
+  --radius: 10px;   /* avrunding på bildehjørner */
+
+  --max: 1280px;
+  --gutter: clamp(20px, 4vw, 48px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; width: 100%; height: auto; }
+
+a { color: inherit; text-decoration: none; }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* På forsiden er headeren skjult til man har scrollet forbi intro-skjermen */
+.har-intro .header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .4s ease, opacity .4s ease;
+}
+.har-intro .header.synlig { transform: none; opacity: 1; pointer-events: auto; }
+
+/* Tre kolonner: lenke til venstre, logo i midten, lenke til høyre */
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 88px;
+}
+
+.logo { display: block; }
+.logo img { height: 24px; width: auto; }   /* juster høyden for å endre logostørrelsen */
+
+.nav-link { font-size: 15px; color: var(--muted); transition: color .2s; justify-self: start; }
+.nav-link:hover { color: var(--text); }
+.nav-right { justify-self: end; }
+
+/* ---------- Forside / intro ----------
+   --u er størrelsen på én rute i rutenettet (1/6 av bredden, men aldri
+   så stor at det ikke får plass i høyden). Alt annet regnes ut fra den. */
+
+.intro {
+  --u: min(100vw / 6, 100svh / 3.375);
+  --ox: calc(50vw - 3 * var(--u));          /* venstre kant av rutenettet */
+  --oy: calc(50svh - 1.6875 * var(--u));    /* topp av rutenettet */
+  --grid: #878787;
+
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: var(--u) var(--u);
+  background-position: calc(var(--ox) + var(--u) / 2) calc(var(--oy) + var(--u) / 2);
+}
+
+.intro-logo {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--oy) + 1.516 * var(--u));
+  width: calc(4.156 * var(--u));
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+/* Ovalen fylles med bakgrunnsfargen, så rutenettet ikke synes gjennom logoen */
+.intro-logo img { background: var(--bg); border-radius: 50%; }
+
+/* Håndtegnet skjelving – slås av for dem som har valgt «reduser bevegelse» */
+@media (prefers-reduced-motion: no-preference) {
+  .intro[data-effekt="handtegnet"] .intro-logo img { filter: url(#skog-wiggle); }
+  .intro[data-effekt="vann"] .intro-logo img { filter: url(#skog-vann); }
+}
+
+.intro-link {
+  position: absolute;
+  top: calc(var(--oy) + 2.5 * var(--u));
+  width: 0;
+  height: 0;
+  color: #000;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.intro-work  { left: calc(var(--ox) + 1.5 * var(--u)); }
+.intro-about { left: calc(var(--ox) + 4.5 * var(--u)); }
+
+.intro-link .label {
+  position: absolute;
+  top: calc(0.033 * var(--u));
+  font-size: max(13px, calc(0.152 * var(--u)));
+  line-height: 1;
+  white-space: nowrap;
+}
+.intro-work .label  { right: calc(0.0625 * var(--u)); }
+.intro-about .label { left: calc(0.06 * var(--u)); }
+
+/* Pluss-tegnet på krysset */
+.plus {
+  --ps: max(14px, calc(0.1125 * var(--u)));
+  --pt: max(1.5px, calc(0.0094 * var(--u)));
+  position: absolute;
+  width: var(--ps);
+  height: var(--ps);
+  left: calc(var(--ps) / -2);
+  top: calc(var(--ps) / -2);
+  transition: transform .35s ease;
+}
+.plus::before, .plus::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.plus::before { left: 0; right: 0; top: calc(50% - var(--pt) / 2); height: var(--pt); }
+.plus::after  { top: 0; bottom: 0; left: calc(50% - var(--pt) / 2); width: var(--pt); }
+
+.intro-link:hover .plus,
+.intro-link:focus-visible .plus { transform: rotate(135deg); }   /* 45° eller 135° gir en X */
+
+/* ---------- Seksjoner ---------- */
+
+.section { padding: clamp(60px, 9vw, 120px) 0; border-top: 1px solid var(--line); }
+.intro + .section { border-top: none; }
+#arbeid { scroll-margin-top: 88px; }
+
+.section-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+/* ---------- Prosjektgalleri ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 3vw, 40px) clamp(16px, 2.5vw, 32px);
+}
+
+.card-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--line);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+}
+
+.card-img img,
+.card-img video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+
+.card:hover .card-img img,
+.card:hover .card-img video { transform: scale(1.03); }
+
+/* Navn og år ligger oppå bildet, øverst til venstre.
+   En svak mørk toning bak gjør hvit tekst lesbar på alle bilder. */
+.card-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 45%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.card-meta {
+  position: absolute;
+  top: clamp(14px, 2vw, 22px);
+  left: clamp(14px, 2vw, 22px);
+  z-index: 1;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.35;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.card-meta strong { display: block; font-family: var(--font-display); font-weight: var(--display-weight); font-size: 22px; line-height: 1.15; }
+.card-meta span { display: block; opacity: .75; }
+
+/* Vises bare når musen er over prosjektet */
+.card:hover .card-meta,
+.card:focus-visible .card-meta { opacity: 1; transform: none; }
+.card:hover .card-img::after,
+.card:focus-visible .card-img::after { opacity: 1; }
+
+/* På mobil/nettbrett finnes ikke hover – der vises teksten alltid */
+@media (hover: none) {
+  .card-meta, .card-img::after { opacity: 1; transform: none; }
+}
+
+/* ---------- Info-overlay ----------
+   Legger seg over siden med litt gjennomsiktighet når man klikker INFO. */
+
+.about {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.about.open { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+body.about-open { overflow: hidden; }
+
+.about-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 88px;
+}
+.about-close {
+  font: inherit;
+  font-size: 15px;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.about-close:hover { color: var(--text); }
+
+.about-body { padding: clamp(32px, 8vh, 96px) 0 64px; max-width: 900px; }
+
+
+.about-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  font-size: 16px;
+}
+.about-row:last-child { border-bottom: 1px solid var(--line); }
+.about-row h2 {
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  padding-top: 3px;
+}
+.about-row ul { list-style: none; }
+.about-row p { max-width: 52ch; }
+.about-row a { border-bottom: 1px solid transparent; transition: border-color .2s; }
+.about-row a:hover { border-color: currentColor; }
+
+/* Innholdet glir litt opp når overlayen åpnes */
+.about-body > * { transform: translateY(12px); transition: transform .5s ease; }
+.about.open .about-body > * { transform: none; }
+
+@media (max-width: 760px) {
+  .about-row { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ---------- Footer ---------- */
+
+.footer { border-top: 1px solid var(--line); padding: 28px 0; font-size: 14px; color: var(--muted); }
+.footer .wrap { display: flex; justify-content: space-between; gap: 16px; }
+
+/* ---------- Prosjektside ---------- */
+
+.project-hero { padding: clamp(60px, 10vw, 140px) 0 48px; }
+
+.back { font-size: 15px; color: var(--muted); display: inline-block; margin-bottom: 40px; }
+.back:hover { color: var(--text); }
+
+.project-hero h1 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(48px, 7.5vw, 104px);
+  line-height: 1.05;
+}
+
+.project-info {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: clamp(32px, 6vw, 96px);
+  padding: 48px 0 clamp(48px, 7vw, 96px);
+}
+
+.project-info p { font-size: 18px; color: var(--muted); max-width: 58ch; margin-bottom: 16px; }
+
+.facts { list-style: none; font-size: 15px; }
+.facts li { display: flex; justify-content: space-between; gap: 24px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.facts li span:first-child { color: var(--muted); flex-shrink: 0; }
+.facts li span:last-child { text-align: right; }
+
+.project-images img,
+.project-images video { display: block; width: 100%; border-radius: var(--radius); }
+.project-images { display: grid; gap: clamp(16px, 2.5vw, 32px); }
+.project-images .pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 32px); }
+
+
+/* Rutenett for mange bilder, f.eks. album-cover */
+.cover-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(12px, 2vw, 24px);
+}
+.cover-grid img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--line);
+}
+@media (max-width: 760px) {
+  .cover-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- Animasjon ved scroll ---------- */
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- Mobil ---------- */
+
+@media (max-width: 760px) {
+  .nav-link { font-size: 14px; }
+  .logo img { height: 20px; }
+  .grid, .about, .project-info, .project-images .pair { grid-template-columns: 1fr; }
+  .footer .wrap { flex-direction: column; }
+}

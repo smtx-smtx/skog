@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elias Olai Skog – Graphic Designer</title>
+  <meta name="description" content="Portfolio of Elias Olai Skog, graphic designer based in Bergen.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="har-intro">
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <!-- Logoen ligger i assets/logo.svg – bytt ut fila med din egen logo -->
+    <nav class="wrap header-inner">
+      <a href="#arbeid" class="nav-link">WORK</a>
+      <a href="index.html" class="logo"><img src="assets/logo.svg" alt="Elias Olai Skog – back to home"></a>
+      <a href="#info" class="nav-link nav-right">INFO</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== Forside (det første man ser) =====
+         Rutenettet har 6 kolonner med kvadratiske ruter. Logo, WORK og INFO
+         er plassert på kryssene i rutenettet, akkurat som i Photoshop-skissen. -->
+    <section class="intro" aria-label="Home">
+      <!-- Filtre for skog-logoen: håndtegnet skjelving og vanneffekt (velges i script.js) -->
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <filter id="skog-wiggle" x="-2%" y="-5%" width="104%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="1" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <!-- Vanneffekt: myk, flytende bølging (styres fra script.js) -->
+        <filter id="skog-vann" x="-3%" y="-8%" width="106%" height="116%" primitiveUnits="objectBoundingBox">
+          <feTurbulence type="fractalNoise" baseFrequency="1.5 4" numOctaves="1" seed="4" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.008" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </svg>
+      <h1 class="intro-logo">
+        <img src="assets/skog-forside.png" alt="Skog – Elias Olai Skog, graphic designer">
+      </h1>
+      <a href="#arbeid" class="intro-link intro-work">
+        <span class="plus" aria-hidden="true"></span><span class="label">WORK</span>
+      </a>
+      <a href="#info" class="intro-link intro-about">
+        <span class="plus" aria-hidden="true"></span><span class="label">INFO</span>
+      </a>
+    </section>
+
+    <!-- ===== Prosjektgalleri =====
+         Plassholdere – byttes ut med ekte prosjekter senere.
+         Nytt prosjekt: kopier en <a class="card">-blokk, bytt bilde,
+         tittel og årstall, og lenk til en egen prosjektside. -->
+    <section id="arbeid" class="section">
+      <div class="wrap">
+        <div class="grid">
+
+          <a href="prosjekter/arboretet.html" class="card reveal">
+            <div class="card-img">
+              <video src="prosjekter/Prosjekt%201/arboretet-video.mp4" autoplay muted loop playsinline preload="auto" aria-label="Logo animation for Arboretet"></video>
+              <div class="card-meta"><strong>Arboretet</strong><span>2026</span></div>
+            </div>
+          </a>
+
+          <a href="prosjekter/cinematic-animation.html" class="card reveal">
+            <div class="card-img">
+              <video src="prosjekter/Prosjekt%202/cinematic-square-thumbnail.mp4" autoplay muted loop playsinline preload="auto" aria-label="Cinematic animation"></video>
+              <div class="card-meta"><strong>Cinematic Animation</strong><span>2025</span></div>
+            </div>
+          </a>
+
+          <a href="prosjekter/magick-touch.html" class="card reveal">
+            <div class="card-img">
+              <img src="prosjekter/Prosjekt%203/1-banner-thumbnail.jpg" alt="Banner for the Magick Touch concert at HULEN Bergen">
+              <div class="card-meta"><strong>Magick Touch</strong><span>2026</span></div>
+            </div>
+          </a>
+
+          <a href="prosjekter/album-covers.html" class="card reveal">
+            <div class="card-img">
+              <img src="prosjekter/Prosjekt%204/web/thumbnail.jpg" alt="Album covers by Elias Olai Skog">
+              <div class="card-meta"><strong>Album Covers</strong><span>2024–2026</span></div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>© <span data-year>2026</span> Elias Olai Skog</span>
+      <a href="#">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

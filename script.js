@@ -59,13 +59,14 @@ if (logoImg && !reduserBevegelse) {
 }
 
 // ===== Header på forsiden =====
-// Headeren (Arbeid / logo / Kontakt) dukker først opp når forsiden er scrollet forbi.
+// Headeren (WORK / logo / INFO) dukker opp når forsiden er halvveis scrollet ut av bildet.
+// (Halvveis, ikke helt, så den også kommer frem på høye skjermer der siden er kort.)
 const intro = document.querySelector(".intro");
 const header = document.querySelector(".header");
 if (intro && header) {
   new IntersectionObserver(([entry]) => {
     header.classList.toggle("synlig", !entry.isIntersecting);
-  }, { rootMargin: "-120px 0px 0px 0px" }).observe(intro);
+  }, { rootMargin: "-50% 0px 0px 0px" }).observe(intro);
 }
 
 // ===== Effekt på skog-logoen =====

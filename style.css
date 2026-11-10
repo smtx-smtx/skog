@@ -347,6 +347,8 @@ body.about-open { overflow: hidden; }
 .project-images video { display: block; width: 100%; border-radius: var(--radius); }
 .project-images { display: grid; gap: clamp(16px, 2.5vw, 32px); }
 .project-images .pair { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 32px); }
+.project-images .pair { align-items: start; }
+.project-images .stack { display: grid; gap: clamp(16px, 2.5vw, 32px); }
 
 
 /* Rutenett for mange bilder, f.eks. album-cover */

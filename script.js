@@ -29,6 +29,27 @@ if (intro && header) {
   }, { rootMargin: "-50% 0px 0px 0px" }).observe(intro);
 }
 
+// ===== Overgang fra forsiden =====
+// Mens forsiden scrolles ut av bildet, toner den over i hvitt (se .intro::after i style.css).
+// OVERGANG_LENGDE: hvor stor del av forsiden man må scrolle før den er helt hvit (0.5–1).
+const OVERGANG_LENGDE = 0.65;
+const introOvergang = document.querySelector(".intro");
+if (introOvergang) {
+  let venter = false;
+  const oppdater = () => {
+    venter = false;
+    const h = introOvergang.offsetHeight || window.innerHeight;
+    const x = Math.min(Math.max(window.scrollY / (h * OVERGANG_LENGDE), 0), 1);
+    const p = x * x * (3 - 2 * x); // myk start og slutt
+    introOvergang.style.setProperty("--p", p.toFixed(4));
+  };
+  window.addEventListener("scroll", () => {
+    if (!venter) { venter = true; requestAnimationFrame(oppdater); }
+  }, { passive: true });
+  window.addEventListener("resize", oppdater);
+  oppdater();
+}
+
 // ===== Effekt på skog-logoen =====
 // Velg effekt: "blekk" (blekk i vann), "vann" (flytende) eller "handtegnet" (skjelvende strek)
 const SKOG_EFFEKT = "blekk";

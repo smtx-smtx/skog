@@ -73,8 +73,12 @@ a { color: inherit; text-decoration: none; }
   height: 88px;
 }
 
-.logo { display: block; }
-.logo img { height: 24px; width: auto; }   /* juster høyden for å endre logostørrelsen */
+.logo { display: grid; }
+.logo img { grid-area: 1 / 1; justify-self: center; height: 24px; width: auto; }
+/* Hover: Top Logo_1 byttes til Top Logo_2 */
+.logo .logo-hover { opacity: 0; }
+.logo:hover .logo-standard, .logo:focus-visible .logo-standard { opacity: 0; }
+.logo:hover .logo-hover, .logo:focus-visible .logo-hover { opacity: 1; }   /* juster høyden for å endre logostørrelsen */
 
 .nav-link { font-size: 15px; color: var(--muted); transition: color .2s; justify-self: start; }
 .nav-link:hover { color: var(--text); }
@@ -88,12 +92,13 @@ a { color: inherit; text-decoration: none; }
   --u: min(100vw / 6, 100svh / 3.375);
   --ox: calc(50vw - 3 * var(--u));          /* venstre kant av rutenettet */
   --oy: calc(50svh - 1.6875 * var(--u));    /* topp av rutenettet */
-  --grid: #878787;
+  --rod: #ff0000;                          /* bakgrunnsfarge på forsiden */
+  --grid: #ffffff;                         /* farge på rutenettet */
 
   position: relative;
   height: 100svh;
   overflow: hidden;
-  background-color: var(--bg);
+  background-color: var(--rod);
   background-image:
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
@@ -110,13 +115,15 @@ a { color: inherit; text-decoration: none; }
   margin: 0;
 }
 
-/* Ovalen fylles med bakgrunnsfargen, så rutenettet ikke synes gjennom logoen */
-.intro-logo img { background: var(--bg); border-radius: 50%; }
+/* Logoen gjøres hvit, og ovalen bak fylles med rødt så rutenettet ikke synes gjennom */
+.intro-logo { background: var(--rod); border-radius: 50%; }
+.intro-logo img { display: block; width: 100%; height: auto; filter: brightness(0) invert(1); }
 
 /* Håndtegnet skjelving – slås av for dem som har valgt «reduser bevegelse» */
 @media (prefers-reduced-motion: no-preference) {
-  .intro[data-effekt="handtegnet"] .intro-logo img { filter: url(#skog-wiggle); }
-  .intro[data-effekt="vann"] .intro-logo img { filter: url(#skog-vann); }
+  .intro[data-effekt="handtegnet"] .intro-logo img { filter: brightness(0) invert(1) url(#skog-wiggle); }
+  .intro[data-effekt="vann"] .intro-logo img { filter: brightness(0) invert(1) url(#skog-vann); }
+  .intro[data-effekt="blekk"] .intro-logo img { filter: brightness(0) invert(1) url(#skog-blekk); }
 }
 
 .intro-link {
@@ -124,7 +131,7 @@ a { color: inherit; text-decoration: none; }
   top: calc(var(--oy) + 2.5 * var(--u));
   width: 0;
   height: 0;
-  color: #000;
+  color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .intro-work  { left: calc(var(--ox) + 1.5 * var(--u)); }
@@ -143,7 +150,7 @@ a { color: inherit; text-decoration: none; }
 /* Pluss-tegnet på krysset */
 .plus {
   --ps: max(14px, calc(0.1125 * var(--u)));
-  --pt: max(1.5px, calc(0.0094 * var(--u)));
+  --pt: max(2.5px, calc(0.018 * var(--u)));   /* tykkelse på plusstegnet */
   position: absolute;
   width: var(--ps);
   height: var(--ps);

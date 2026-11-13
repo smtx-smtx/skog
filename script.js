@@ -15,48 +15,8 @@ document.querySelectorAll("[data-year]").forEach((el) => {
   el.textContent = new Date().getFullYear();
 });
 
-// ===== Logo-flimmer =====
-// Når musen er over logoen, bytter den raskt mellom variasjonene under.
-// Legg til/fjern filer i lista for å endre hvilke variasjoner som brukes (de ligger i assets/).
-const LOGO_VARIASJONER = ["logo-1.png", "logo-2.svg", "logo-3.svg", "logo-4.svg"];
-const LOGO_FART = 90; // millisekunder per bilde – lavere tall = raskere flimmer
-
-const logoLink = document.querySelector(".logo");
-const logoImg = logoLink && logoLink.querySelector("img");
+// Logoen i toppbaren bytter til Top Logo_2 ved hover – det styres i style.css (.logo-hover).
 const reduserBevegelse = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-if (logoImg && !reduserBevegelse) {
-  const original = logoImg.getAttribute("src");
-  const mappe = original.slice(0, original.lastIndexOf("/") + 1); // "assets/" eller "../assets/"
-  const bilder = LOGO_VARIASJONER.map((fil) => mappe + fil);
-
-  // Last inn alle variasjonene på forhånd, så det ikke blinker tomt
-  bilder.forEach((src) => { const i = new Image(); i.src = src; });
-
-  let timer = null;
-  let steg = 0;
-
-  const start = () => {
-    if (timer) return;
-    steg = 0;
-    logoImg.src = bilder[0];
-    timer = setInterval(() => {
-      steg = (steg + 1) % bilder.length;
-      logoImg.src = bilder[steg];
-    }, LOGO_FART);
-  };
-
-  const stopp = () => {
-    clearInterval(timer);
-    timer = null;
-    logoImg.src = original;
-  };
-
-  logoLink.addEventListener("mouseenter", start);
-  logoLink.addEventListener("mouseleave", stopp);
-  logoLink.addEventListener("focus", start);
-  logoLink.addEventListener("blur", stopp);
-}
 
 // ===== Header på forsiden =====
 // Headeren (WORK / logo / INFO) dukker opp når forsiden er halvveis scrollet ut av bildet.
@@ -70,8 +30,8 @@ if (intro && header) {
 }
 
 // ===== Effekt på skog-logoen =====
-// Velg effekt: "vann" (flytende) eller "handtegnet" (skjelvende strek)
-const SKOG_EFFEKT = "handtegnet";
+// Velg effekt: "blekk" (blekk i vann), "vann" (flytende) eller "handtegnet" (skjelvende strek)
+const SKOG_EFFEKT = "blekk";
 
 const introEl = document.querySelector(".intro");
 if (introEl && !reduserBevegelse) {
@@ -104,6 +64,41 @@ if (introEl && !reduserBevegelse) {
         const fx = 1.5 + 0.35 * Math.sin(t);
         const fy = 4 + 0.9 * Math.cos(t * 0.8);
         turbulens.setAttribute("baseFrequency", `${fx.toFixed(5)} ${fy.toFixed(5)}`);
+      }
+      requestAnimationFrame(tegn);
+    };
+    requestAnimationFrame(tegn);
+  }
+
+  if (SKOG_EFFEKT === "blekk") {
+    // Blekk i vann: streken flyter sakte, og et mykt slør av blekk siver ut,
+    // virvler rundt og trekker seg tilbake i en rolig «pust» som aldri stopper.
+    // Verdiene under gjelder for en logo som er 550 px bred, og skaleres med logoen.
+    const BLEKK_FART = 0.22;   // høyere = raskere strømmer
+    const PUST_SEKUNDER = 9;   // hvor lang tid én «pust» av sløret tar
+    const SLOER_STYRKE = 1;    // hvor langt sløret siver ut (f.eks. 0.5–1.5)
+
+    const f = document.querySelector("#skog-blekk");
+    const stroem = f.querySelector('[result="stroem"]');
+    const blekk = f.querySelector('[result="blekk"]');
+    const virvel = f.querySelector('[result="virvel"]');
+    const mykt = f.querySelector('[result="mykt"]');
+    const sloer = f.querySelector('[result="sloer"]');
+    const logo = introEl.querySelector(".intro-logo img");
+    const start = performance.now();
+    let sist = 0;
+    const tegn = (na) => {
+      if (na - sist > 33) { // ca. 30 bilder i sekundet
+        sist = na;
+        const k = (logo.getBoundingClientRect().width || 550) / 550;
+        const sek = (na - start) / 1000;
+        const t = sek * BLEKK_FART;
+        const pust = 0.5 - 0.5 * Math.cos((sek / PUST_SEKUNDER) * Math.PI * 2); // 0 → 1 → 0
+        stroem.setAttribute("baseFrequency", `${((0.02 + 0.004 * Math.sin(t)) / k).toFixed(5)} ${((0.026 + 0.005 * Math.cos(t * 0.7)) / k).toFixed(5)}`);
+        blekk.setAttribute("scale", (3 * k).toFixed(2));
+        virvel.setAttribute("baseFrequency", `${((0.028 + 0.006 * Math.sin(t * 1.3 + 1)) / k).toFixed(5)} ${((0.036 + 0.008 * Math.cos(t * 0.9 + 2)) / k).toFixed(5)}`);
+        mykt.setAttribute("stdDeviation", ((1.6 + 2.4 * pust) * k * SLOER_STYRKE).toFixed(2));
+        sloer.setAttribute("scale", ((16 + 22 * pust) * k * SLOER_STYRKE).toFixed(2));
       }
       requestAnimationFrame(tegn);
     };

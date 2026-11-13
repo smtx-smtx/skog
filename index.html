@@ -38,15 +38,21 @@
           <feTurbulence type="fractalNoise" baseFrequency="1.5 4" numOctaves="1" seed="4" result="noise" />
           <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.008" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <!-- Blekk i vann: en skarp, sakte flytende strek med et mykt «slør» av blekk
-             som siver ut og virvler rundt den (styres fra script.js) -->
+        <!-- Blekk i vann: de hvite strekene forvrenges sakte, som blekk som flyter i vann,
+             og et mykt, kornete slør av blekk siver ut rundt dem. Grainen ligger bare på
+             sløret, så selve logoen forblir hel (styres fra script.js) -->
         <filter id="skog-blekk" x="-10%" y="-25%" width="120%" height="150%" color-interpolation-filters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="1" seed="3" result="stroem" />
-          <feDisplacementMap in="SourceGraphic" in2="stroem" scale="4" xChannelSelector="R" yChannelSelector="G" result="blekk" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="stroem" />
+          <feDisplacementMap in="SourceGraphic" in2="stroem" scale="10" xChannelSelector="R" yChannelSelector="G" result="blekk" />
           <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="9" result="virvel" />
           <feGaussianBlur in="blekk" stdDeviation="3" result="mykt" />
           <feDisplacementMap in="mykt" in2="virvel" scale="20" xChannelSelector="G" yChannelSelector="R" result="sloer" />
-          <feColorMatrix in="sloer" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.6 0" result="sloerSvak" />
+          <!-- Grain: baseFrequency styrer kornstørrelsen (høyere = finere korn),
+               tallene «1.6 … 0.15» i kornmasken styrer hvor sterkt det er (lavere 1.6 = svakere) -->
+          <feTurbulence type="fractalNoise" baseFrequency="1.8" numOctaves="1" seed="1" result="korn" />
+          <feColorMatrix in="korn" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.6 0 0 0 0.15" result="kornmaske" />
+          <feComposite in="sloer" in2="kornmaske" operator="in" result="sloerKorn" />
+          <feColorMatrix in="sloerKorn" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.75 0" result="sloerSvak" />
           <feMerge>
             <feMergeNode in="sloerSvak" />
             <feMergeNode in="blekk" />

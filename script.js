@@ -71,22 +71,20 @@ if (introEl && !reduserBevegelse) {
   }
 
   if (SKOG_EFFEKT === "blekk") {
-    // Blekk i vann: de hvite strekene forvrenges og flyter sakte, og et mykt slør av
-    // blekk siver ut rundt dem. Begge vokser og avtar i en rolig «pust» som aldri stopper.
-    // Grainen ligger bare på sløret, så selve logoen forblir hel.
+    // Blekk i vann: de hvite strekene forvrenges og flyter sakte, med en myk glow rundt.
+    // Begge vokser og avtar i en rolig «pust» som aldri stopper.
+    // Grainen ligger bare på glowen, så selve logoen forblir hel.
     // Verdiene under gjelder for en logo som er 550 px bred, og skaleres med logoen.
     const BLEKK_FART = 0.22;     // høyere = raskere strømmer
     const PUST_SEKUNDER = 9;     // hvor lang tid én «pust» tar
     const FORVRENGNING = 1;      // hvor mye strekene forvrenges (f.eks. 0.5–2)
-    const SLOER_STYRKE = 1;      // hvor langt sløret (glowen) siver ut (f.eks. 0.5–1.5)
+    const GLOW_STYRKE = 1;       // hvor stor glowen er (f.eks. 0.5–1.5)
     const GRAIN_FART = 90;       // millisekunder per nytt grain-mønster (høyere = roligere)
 
     const f = document.querySelector("#skog-blekk");
     const stroem = f.querySelector('[result="stroem"]');
     const blekk = f.querySelector('[result="blekk"]');
-    const virvel = f.querySelector('[result="virvel"]');
     const mykt = f.querySelector('[result="mykt"]');
-    const sloer = f.querySelector('[result="sloer"]');
     const korn = f.querySelector('[result="korn"]');
     const logo = introEl.querySelector(".intro-logo img");
     const start = performance.now();
@@ -102,9 +100,7 @@ if (introEl && !reduserBevegelse) {
         const pust = 0.5 - 0.5 * Math.cos((sek / PUST_SEKUNDER) * Math.PI * 2); // 0 → 1 → 0
         stroem.setAttribute("baseFrequency", `${((0.011 + 0.003 * Math.sin(t)) / k).toFixed(5)} ${((0.016 + 0.004 * Math.cos(t * 0.7)) / k).toFixed(5)}`);
         blekk.setAttribute("scale", ((6 + 8 * pust) * k * FORVRENGNING).toFixed(2));
-        virvel.setAttribute("baseFrequency", `${((0.028 + 0.006 * Math.sin(t * 1.3 + 1)) / k).toFixed(5)} ${((0.036 + 0.008 * Math.cos(t * 0.9 + 2)) / k).toFixed(5)}`);
-        mykt.setAttribute("stdDeviation", ((1.6 + 2.4 * pust) * k * SLOER_STYRKE).toFixed(2));
-        sloer.setAttribute("scale", ((16 + 22 * pust) * k * SLOER_STYRKE).toFixed(2));
+        mykt.setAttribute("stdDeviation", ((3 + 3 * pust) * k * GLOW_STYRKE).toFixed(2));
       }
       if (na - sistKorn > GRAIN_FART) {
         sistKorn = na;
